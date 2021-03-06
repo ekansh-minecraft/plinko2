@@ -1,120 +1,226 @@
 const Engine = Matter.Engine;
 const World= Matter.World;
 const Bodies = Matter.Bodies;
+const Body = Matter.body;
 const Constraint = Matter.Constraint;
 
 var engine, world;
-var box1, pig1,pig3;
-var backgroundImg,platform;
-var bird, slingshot;
 
-var gameState = "onSling";
-var bg = "sprites/bg1.png";
-var score = 0;
+var divisions = []
+var plinkos = []
+var particles = []
+
+var divisionHeight = 300
+
+
+var ground
+
+var width = 600
+
+var particles = []
+
+var END = 98
+var PLAY = 78
+
+var gameState = PLAY
+
+var score = 0
+
+var count
+
+var particle;
+
+var yellowLine;
+
+
+
 
 function preload() {
-    getBackgroundImg();
 }
 
 function setup(){
-    var canvas = createCanvas(1200,400);
+    createCanvas(600,800);
     engine = Engine.create();
     world = engine.world;
 
 
-    ground = new Ground(600,height,1200,20);
-    platform = new Ground(150, 305, 300, 170);
+    // yellowLine = createSprite(0,470,2000,10);
 
-    box1 = new Box(700,320,70,70);
-    box2 = new Box(920,320,70,70);
-    pig1 = new Pig(810, 350);
-    log1 = new Log(810,260,300, PI/2);
+    
+   
 
-    box3 = new Box(700,240,70,70);
-    box4 = new Box(920,240,70,70);
-    pig3 = new Pig(810, 220);
+    
+    for(var k = 15; k <510 - 10; k = k + 50)
+    {
+        divisions.push(new Division(k, 800-divisionHeight/2, 10, divisionHeight));
+    } 
 
-    log3 =  new Log(810,180,300, PI/2);
 
-    box5 = new Box(810,160,70,70);
-    log4 = new Log(760,120,150, PI/7);
-    log5 = new Log(870,120,150, -PI/7);
 
-    bird = new Bird(200,50);
 
-    //log6 = new Log(230,180,80, PI/2);
-    slingshot = new SlingShot(bird.body,{x:200, y:50});
+    for(var x = 40; x<= 460 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,70))
+    }
+
+    for(var x = 15; x<= 510 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,110))
+    }
+
+    for(var x = 40; x<=460 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,150))
+    }
+
+    for(var x = 15; x<= 510 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,190))
+    }
+
+    for(var x = 40; x<=460 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,230))
+    }
+
+    for(var x = 15; x <=510 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,270))
+    }
+
+    for(var x = 40; x <=460 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,310))
+    }
+
+    for(var x = 15; x <=510 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,350))
+    }
+    for(var x = 40; x<=460 - 10; x=x+50)
+    {
+        plinkos.push(new Plinko(x,390))
+    }
+    for(var x = 15; x<=510 - 10; x=x + 50)
+    {
+        plinkos.push(new Plinko(x,430))
+    }
+
+
+
+    ground = new Ground(234,795,450,10)
+
+    // drawSprites()
 }
 
 function draw(){
-    if(backgroundImg)
-        background(backgroundImg);
+    imageMode(CENTER)
+    background("black") 
+
+    ground.display()
     
-        noStroke();
-        textSize(35)
-        fill("white")
-        text("Score  " + score, width-300, 50)
+               
+    for(var k=0; k<divisions.length; k++) {
+        divisions[k].display()
+    }
+
+    for(var x =0; x <plinkos.length; x = x + 1) 
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x <plinkos.length; x = x + 1)
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x<plinkos.length; x=x + 1)
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x<plinkos.length; x=x +1)
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x<plinkos.length; x=x + 1)
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x<plinkos.length; x=x + 1)
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x<plinkos.length; x=x + 1)
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x<plinkos.length; x=x + 1)
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x<plinkos.length; x=x + 1)
+    {
+        plinkos[x].display()
+    }
+    for(var x = 0; x<plinkos.length; x=x + 1)
+    {
+        plinkos[x].display()
+    }
+
+
+     
+    spawnParticle()
+
+    text("score : " + score,40,40)
+   
     
     Engine.update(engine);
-    //strokeWeight(4);
-    box1.display();
-    box2.display();
-    ground.display();
-    pig1.display();
-    pig1.score();
-    log1.display();
-
-    box3.display();
-    box4.display();
-    pig3.display();
-    pig3.score();
-    log3.display();
-
-    box5.display();
-    log4.display();
-    log5.display();
-
-    bird.display();
-    platform.display();
-    //log6.display();
-    slingshot.display();    
 }
+function spawnParticle()
+{
+  console.log(frameCount)
+        if(frameCount%60 ==0)
+        {
+            console.log("This button is preesed")
+            particles.push(new Particle(random(width/2 - 10,width/2 + 10), 10,10));
+        }
+        for(var j = 0; j<particles.length; j++)
+        {
+            particles[j].display();
+        }
 
-function mouseDragged(){
-    //if (gameState!=="launched"){
-        Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
-    //}
-}
 
+    if(gameState == PLAY)
+    {
 
-function mouseReleased(){
-    slingshot.fly();
-    gameState = "launched";
-}
+        yellowLine.display();
+        
+        if(particle = null)
+        {
+            particle.display();
 
-function keyPressed(){
-    if(keyCode === 32){
-        bird.trajectory = [];
-        Matter.Body.setPosition(bird.body,{x:200, y:50});
-       slingshot.attach(bird.body);
+            if(particle.body.position.y > 760)
+            {
+                if(particle.body.position.x < 300)
+                {
+                    score=score+500;
+                    particle=null;
+                    if(count>= 5) gameState = "END";
+                }
+            }
+        }
+
+        }
+    }    
+function mousePressed()
+{
+    // if(gameState !== END)
+    // {
+    //   count++ 
+    //   particle = new Particle(mouseX, 10, 10,10)
+    //   text("GAMEOVER",200,200)
+      
+    // }
+    if(keyDown("r"))
+    {
+        gameState = "PLAY"
     }
-
-}
-
-async function getBackgroundImg(){
-    var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata");
-    var responseJSON = await response.json();
-
-    var datetime = responseJSON.datetime;
-    var hour = datetime.slice(11,13);
-    
-    if(hour>=0600 && hour<=1900){
-        bg = "sprites/bg1.png";
-    }
-    else{
-        bg = "sprites/bg2.jpg";
-    }
-
-    backgroundImg = loadImage(bg);
-    console.log(backgroundImg);
 }
