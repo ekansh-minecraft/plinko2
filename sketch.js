@@ -8,7 +8,6 @@ var engine, world;
 
 var divisions = []
 var plinkos = []
-var particles = []
 
 var divisionHeight = 300
 
@@ -17,7 +16,7 @@ var ground
 
 var width = 600
 
-var particles = []
+var particle
 
 var END = 98
 var PLAY = 78
@@ -44,8 +43,8 @@ function setup(){
     world = engine.world;
 
 
-    // yellowLine = createSprite(0,470,2000,10);
-
+    
+    
     
    
 
@@ -110,7 +109,7 @@ function setup(){
 
     ground = new Ground(234,795,450,10)
 
-    // drawSprites()
+
 }
 
 function draw(){
@@ -118,6 +117,12 @@ function draw(){
     background("black") 
 
     ground.display()
+
+    rect(600,470,13000,10)
+
+    fill("yellow")
+
+    
     
                
     for(var k=0; k<divisions.length; k++) {
@@ -128,88 +133,78 @@ function draw(){
     {
         plinkos[x].display()
     }
-    for(var x = 0; x <plinkos.length; x = x + 1)
-    {
-        plinkos[x].display()
-    }
-    for(var x = 0; x<plinkos.length; x=x + 1)
-    {
-        plinkos[x].display()
-    }
-    for(var x = 0; x<plinkos.length; x=x +1)
-    {
-        plinkos[x].display()
-    }
-    for(var x = 0; x<plinkos.length; x=x + 1)
-    {
-        plinkos[x].display()
-    }
-    for(var x = 0; x<plinkos.length; x=x + 1)
-    {
-        plinkos[x].display()
-    }
-    for(var x = 0; x<plinkos.length; x=x + 1)
-    {
-        plinkos[x].display()
-    }
-    for(var x = 0; x<plinkos.length; x=x + 1)
-    {
-        plinkos[x].display()
-    }
-    for(var x = 0; x<plinkos.length; x=x + 1)
-    {
-        plinkos[x].display()
-    }
-    for(var x = 0; x<plinkos.length; x=x + 1)
-    {
-        plinkos[x].display()
-    }
-
-
      
+    // if player presses SPACE, spawn ONE particle. Make sure that we don't already have another particle.
+    // If there is a particle, display it.
+    // Track the particle till 750
+
     spawnParticle()
 
     text("score : " + score,40,40)
+    text("press space to spawn the particle and if you want to stop spawning the particles just press any key but not space", 0,460)
+
    
     
     Engine.update(engine);
 }
 function spawnParticle()
 {
-  console.log(frameCount)
-        if(frameCount%60 ==0)
-        {
-            console.log("This button is preesed")
-            particles.push(new Particle(random(width/2 - 10,width/2 + 10), 10,10));
-        }
-        for(var j = 0; j<particles.length; j++)
-        {
-            particles[j].display();
-        }
-
-
-    if(gameState == PLAY)
-    {
-
-        yellowLine.display();
         
-        if(particle = null)
-        {
-            particle.display();
-
-            if(particle.body.position.y > 760)
+            if(keyCode == 32 && particle == null)
             {
-                if(particle.body.position.x < 300)
-                {
-                    score=score+500;
-                    particle=null;
-                    if(count>= 5) gameState = "END";
-                }
-            }
-        }
+                particle = new Particle(random(width/2 - 10,width/2 + 10), 10,10)
 
-        }
-    }    
+
+            }
+
+               if(particle != null)
+                {  
+                   particle.display()
+                }
+
+                if(particle != null)
+                {
+                   var pos = particle.body.position;
+                   if(pos.y > 750) 
+                   {
+                       
+                        // scoring
+                        if(pos.x <= 400)
+                        {
+                                score += 500
+                        }
+
+                        if(pos.x > 400 && pos.x <= 500)
+                        {
+
+                            score += 100
+
+                        }
+
+                        if(pos.x > 501 && pos.x <= 800) 
+                        {
+                            score += 200
+                        }
+
+                        particle = null
+                    }
+
+                }
+                
+
+        // if(particle != null)
+        // {
+        //     console.log("Pos: " + particle.body.position)
+        //     particle.display();
+
+        //     if(particle.body.position.y > 760 && particle.body.position.x < 300)
+        //     {
+        //         score=score+500;
+        //         particle=null;
+        //     }
+        // }
+}
+
 function mousePressed()
 {
     // if(gameState !== END)
@@ -219,8 +214,8 @@ function mousePressed()
     //   text("GAMEOVER",200,200)
       
     // }
-    if(keyDown("r"))
-    {
-        gameState = "PLAY"
-    }
+    // if(keyDown("r"))
+    // {
+    //     gameState = "PLAY"
+    // }
 }
